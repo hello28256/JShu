@@ -1,0 +1,368 @@
+
+##vim常用语法
+#一般模式
+u：撤销
+p：粘贴
+Shift+v：行模式
+Ctrl+v：列模式
+G：调到页尾
+gg：调到页头
+#编辑模式
+i：插入
+Esc：退出编辑模式
+#命令模式
+:w：保存
+:q：退出
+:!：强制执行
+:set nu 显示行号
+:set nonu 不显示行号
+:%s/old/new/gc：替换，加c一个一个替换，不加全部替换
+
+##常用命令
+pwd：当前工作目录绝度路径
+ls：列出当前目录的内容
+	-l：显示详细信息（文件修改日期，权限，大小，所有者）
+	-h：以人能看懂的方式显示文件大小，要和ll搭配
+	-r：倒序
+	-t；以时间排序，最新的在最上面
+	-a：显示隐藏文件
+cd：切换路径 后面跟路径，没有路径就切回家目录
+	-：上次所在的路径
+	~：家目录
+	..:上级目录
+mkdir：创建文件夹
+	-p：创建多层目录
+touch：创建文件
+cp 源文件 目标文件：复制
+	-r：递归复制
+scp：远程复制
+	scp hello28256@182.92.177.191:/home/hello28256/file01 .
+	需要输入hello28256密码
+rm：删除文件或目录
+	-r：递归删除
+	-f：force强制
+	-v：显示详细执行过程
+mv：移动文件或目录或重命名
+cat：查看文件内容
+echo：输出内容到控制台
+	\\：输出\
+	\t：制表符
+	\n：换行符
+	echo -e 'hello\\nihao\t你好\n'
+head：查看头部内容
+	-n 10：查看前10行
+tail：输出文件尾部内容
+	-n 10：输出尾部10行内容
+	-f：实时追踪，不写-n就10行
+>：重定向，覆盖写入
+>>：追加写入
+ln -s 原目录或文件 连接名
+	如果是目录，rm -rf ln_test/ 会把目录里面的内容都删除掉，rm -rf ln_test是删除软链接
+history：查看历史命令
+	-c清除历史命令
+date：显示系统当前时间
+clear：清屏
+which + 命令：查看命令所在的位置
+man：帮助手册
+diff file01 file02：对比两个文件的区别
+file file01：检测文件格式信息
+wc file01：查看文件有多少行，单词数，字符数
+	-l：查看有多少行
+	-c：查看有多少词
+gzip：压缩文件	压缩多少个文件就产生多少个压缩包，不会保留原文件，不能压缩目录
+	gzip lnTest.txt
+gunzip：解压文件
+	gunzip lnTest.txt.gz
+zip：压缩
+	zip 压缩文件名.zip  源文件
+	zip -r 压缩文件名 文件夹
+uzip：解压
+	zip 压缩文件名.zip
+tar:压缩和解压文件
+	-c：执行压缩模式
+	-z：压缩或解压gzip格式
+	-x：执行解压模式
+	-v：显示详细信息
+	-f：指压缩后文件名
+	-C：指定解压地址
+	tar -zcvf 压缩文件名.tar.gz 源文件
+	tar -zxvf 解压文件名.tar.gz -C 解压到的目录
+ctrl + a：移动到行首
+ctrl + e：移动到行尾
+ctrl + ←：向左跳一个单词
+ctrl + →：向右跳一个单词
+shell参数传递：
+	$1-$9：表示第一个参数到第九个参数，>=10时，需要用{}，如${10}才表示第10个参数，$10表示10
+	$0：脚本名
+	$#：脚本参数个数
+	$$：脚本运行的当前进程ID号
+	$?：显示命令最后退出的状态
+	$*: 如果传递了多个参数，*当做一个，"1 2 3"
+	$@：会把每一个参数分开，如"1""2""3"，三个参数
+passwd：重置密码
+id 用户：查看用户是否存在
+su 用户：切换用户
+deluser：删除用户
+	-r：不加删除但保留用户主目录，加删除且删除用户主目录
+sudo：设置普通用户有
+usermod -aG 用户组 用户名：将用户加入用户组
+addgroup 组名：创建组
+delgroup 组名：删除组
+groupmol 老组名 新组名：修改组
+cat /etc/group：查看创建了哪些组
+whoami：查看当前用户
+id：当前用户信息
+##文件权限
+ps -ef/ps aux：查看系统当前进程
+kill -9 pid：杀死进程
+
+
+##shell三剑客
+grep：文本搜索
+	-i：忽略大小写
+	-v：反向匹配
+	-n：显示行号
+	-r：递归查找
+	-E：正则匹配
+sed：查找+替换
+	s/old/new/：替换每行第一个old
+	s/old/new/g：替换每行的所有的old
+	/pattern/d： 删除匹配到的行
+	/pattern/p：显示匹配到的行,通常搭配-n
+	i：插入向新行
+	a：追加新行
+	sed 's/foo/bar/' file.txt          # 每行替换第一个 foo 为 bar
+	sed 's/foo/bar/g' file.txt         # 每行替换所有 foo 为 bar
+	sed -n '5,10p' file.txt            # 显示第5~10行
+	sed '/test/d' file.txt             # 删除所有包含 test 的行
+	sed '2i Hello' file.txt            # 在第2行前插入 Hello
+	sed '$a END' file.txt              # 在最后一行后添加 END
+awd：字段处理
+	$0 表示整行，$1 第1列，$2 第2列，...
+	awk '{print $1}' file.txt               # 打印每行第1列
+	awk -F ':' '{print $1, $3}' /etc/passwd # 使用冒号分隔，打印第1列和第3列
+	awk '$3 > 60 {print $1}' score.txt      # 打印第3列大于60的行的第1列
+	awk '{sum += $2} END {print sum}' data.txt  # 求第2列的总和
+	张三,80
+	李四,40
+	王五,74
+	赵六,50
+	awk -F ',' '
+	$2 >= 60 {
+		print $1, "及格"
+	}
+	$2 < 60 {
+		print $1, "不及格"
+	}
+	' students
+	#张三 及格
+	#李四 不及格
+	#王五 及格
+	#赵六 不及格
+
+
+
+
+一、Linux 习题（100 题）
+1. 基础命令（50 题）
+查看当前目录路径
+答案：pwd
+列出目录下所有文件（含隐藏文件）
+答案：ls -a
+创建名为风控数据的目录
+答案：mkdir 风控数据
+删除空目录临时文件
+答案：rmdir 临时文件
+复制文件a.csv到风控数据目录
+答案：cp a.csv 风控数据/
+移动文件b.txt并重命名为报告.txt
+答案：mv b.txt 报告.txt
+查看文件data.log的前 10 行
+答案：head -n 10 data.log
+查看文件data.log的最后 5 行
+答案：tail -n 5 data.log
+统计文件loan.csv的行数
+答案：wc -l loan.csv
+搜索文件中包含逾期的所有行
+答案：grep '逾期' 文件名
+查看系统当前进程
+答案：ps -ef 或 ps aux
+杀死进程号为 1234 的进程
+答案：kill -9 1234
+压缩目录风控模型为model.zip
+答案：zip -r model.zip 风控模型/
+解压data.tar.gz文件
+答案：tar -xzvf data.tar.gz
+查看文件权限并修改为可读可写可执行
+答案：ls -l; chmod 777 文件名
+查看磁盘空间使用情况
+答案：df -h
+查看内存使用情况
+答案：free -h
+实时监控日志文件app.log
+答案：tail -f app.log
+在当前目录下查找所有.csv 文件
+答案：find . -name "*.csv"
+统计文件中每个单词的出现次数
+答案：cat 文件名 | tr ' ' '\n' | sort | uniq -c
+创建多层目录风控/数据/原始
+答案：mkdir -p 风控/数据/原始
+复制文件并保留权限
+答案：cp -p source.csv target.csv
+删除非空目录
+答案：rm -r 目录名
+查看文件类型
+答案：file 文件名
+清空文件内容
+答案：echo > 文件名
+查看文件最后修改时间
+答案：stat 文件名
+查找 7 天内修改过的文件
+答案：find . -mtime -7
+压缩多个文件为一个包
+答案：tar -czvf data.tar.gz file1.csv file2.csv
+解压缩到指定目录
+答案：tar -xzvf data.tar.gz -C 目标目录
+查看命令帮助文档
+答案：man 命令名（如 man grep）
+管道连接两个命令（如统计行数）
+答案：ls -l | wc -l
+重定向输出到文件
+答案：命令 > 文件名
+追加内容到文件
+答案：echo "内容" >> 文件名
+查找包含特定字符串的所有文件
+答案：grep -r '关键词' 目录
+替换文件中的字符串
+答案：sed -i 's/旧字符串/新字符串/g' 文件名
+查看网络连接状态
+答案：netstat -an
+查看 CPU 使用率
+答案：top 或 htop
+查找占用内存最高的进程
+答案：ps aux | sort -k4nr | head -n 5
+创建软链接
+答案：ln -s 源文件 链接名
+硬链接文件
+答案：ln 源文件 链接名
+查看用户列表
+答案：cat /etc/passwd
+切换用户
+答案：su - 用户名
+查看当前用户
+答案：whoami
+设置环境变量
+答案：export 变量名=值
+查找可执行文件路径
+答案：which 命令名
+查看历史命令
+答案：history
+终止所有 Python 进程
+答案：pkill python
+查看文件 inode 信息
+答案：ls -i 文件名
+计算目录大小
+答案：du -sh 目录名
+查看系统版本
+答案：cat /etc/os-release
+2. 风控场景实战（50 题）
+从日志文件中提取所有违约客户的 ID（ID 在第 3 列，逗号分隔）
+答案：grep '违约' 日志文件 | awk -F',' '{print $3}'
+将多个 CSV 文件合并为一个（文件名格式 data_202301.csv 至 data_202312.csv）
+答案：cat data_2023??.csv > 全年数据.csv
+删除文件中重复的客户记录（按第一列 ID 去重）
+答案：awk '!seen[$1]++' 文件名 > 去重后文件.csv
+统计每天的贷款申请量（日志中时间格式为 YYYY-MM-DD）
+答案：grep '申请' 日志文件 | cut -d' ' -f1 | uniq -c
+压缩超过 30 天的历史数据文件
+答案：find . -type f -mtime +30 -exec gzip {} \;
+提取逾期超过 90 天的客户信息并保存到新文件
+答案：grep '逾期天数:90' 风险日志.log > 高风险客户列表.txt
+统计各地区的客户数量（地区信息在第 5 列）
+答案：cut -d',' -f5 客户表.csv | uniq -c
+实时监控风控模型的运行日志
+答案：tail -f 风控模型.log
+批量重命名文件（将_old替换为_new）
+答案：rename 's/_old/_new/g' *.csv
+查找包含NULL值的行（日志中标记为<NULL>）
+答案：grep '<NULL>' 数据文件.csv
+计算风控脚本的执行时间
+答案：time python 风险评估.py
+筛选出金额大于 100 万的贷款记录
+答案：grep ',1000000,' 贷款表.csv
+将日志中的时间格式转换为 YYYY/MM/DD
+答案：sed 's/-/\\//g' 日志文件.log
+统计每个 IP 地址的访问次数（IP 在第 4 列）
+答案：cut -d',' -f4 访问日志.csv | uniq -c | sort -nr
+删除文件中包含测试数据的行
+答案：sed -i '/测试数据/d' 数据集.csv
+提取客户身份证号的前 6 位（地区代码）
+答案：cut -d',' -f2 客户信息.csv | cut -c1-6
+合并两个目录下的所有 CSV 文件
+答案：find 目录1 目录2 -name "*.csv" -exec cat {} + > 合并数据.csv
+查找文件中超过 100MB 的大文件
+答案：find . -type f -size +100M
+统计风控报告中各状态的数量（状态在第 6 列）
+答案：cut -d',' -f6 报告.csv | uniq -c
+将文件权限设置为用户可读可写，组和其他用户只读
+答案：chmod 644 文件名
+提取交易日志中的异常交易金额（大于 50000）
+答案：grep ',50000,' 交易日志.csv | cut -d',' -f3
+压缩并加密敏感数据文件
+答案：gpg -c 敏感数据.csv && gzip 敏感数据.csv.gpg
+查看风控系统的端口占用情况
+答案：netstat -tunlp | grep 风控端口号
+批量删除空文件
+答案：find . -type f -empty -delete
+统计每个客户的申请次数（客户 ID 在第 2 列）
+答案：cut -d',' -f2 申请表.csv | uniq -c
+将日志按日期分类存储（日期在文件名中）
+答案：mv 日志_202301.log 2023/01/
+查找三天内修改过的 Python 脚本
+答案：find . -type f -name "*.py" -mtime -3
+统计风控模型输出文件中的平均评分
+答案：cut -d',' -f4 评分结果.csv | awk '{sum+=$1} END {print sum/NR}'
+过滤掉日志中的正常请求（标记为[NORMAL]）
+答案：grep -v '[NORMAL]' 系统日志.log
+将大文件分割为 10MB 的小文件
+答案：split -b 10M 大文件.csv 小文件_
+提取逾期客户的联系方式（电话在第 7 列）
+答案：grep '逾期' 客户表.csv | cut -d',' -f7
+统计每个小时的贷款审批量（时间格式 HH:MM:SS）
+答案：cut -d' ' -f2 审批日志.log | cut -d':' -f1 | uniq -c
+删除文件中的重复行（完全重复）
+答案：sort 文件名 | uniq
+查看风控系统的 CPU 使用率 top 5 进程
+答案：top -n 1 | head -n 10
+将 Excel 文件转换为 CSV（需先安装 libreoffice）
+答案：soffice --headless --convert-to csv --outdir . 输入.xlsx
+提取信用评分低于 600 分的客户 ID
+答案：grep ',<600,' 评分表.csv | cut -d',' -f1
+统计各贷款类型的文件数量（类型在文件名中）
+答案：ls -l | grep '消费贷' | wc -l
+实时统计风控接口的请求频率
+答案：watch -n 1 'grep "接口请求" 日志.log | wc -l'
+将文件中的制表符转换为逗号
+答案：sed 's/\t/,/g' 旧文件.csv > 新文件.csv
+查找包含多个关键词的行（如逾期和未还款）
+答案：grep '逾期' 日志.log | grep '未还款'
+压缩目录并排除特定文件
+答案：tar -czvf 压缩包.tar.gz --exclude=排除文件 目录/
+统计客户地址中出现最多的城市（地址在第 8 列）
+答案：cut -d',' -f8 客户表.csv | uniq -c | sort -nr | head -n 1
+查看风控模型的内存占用
+答案：ps -p 模型进程号 -o %mem
+批量修改文件后缀名（.txt 改为.csv）
+答案：for f in *.txt; do mv -- "$f" "${f%.txt}.csv"; done
+提取交易时间在凌晨 2-5 点的记录
+答案：grep '0[2-5]:' 交易日志.csv
+统计每个风控策略的触发次数（策略名在第 9 列）
+答案：cut -d',' -f9 策略日志.csv | uniq -c
+删除文件中以#开头的注释行
+答案：sed -i '/^#/d' 配置文件.conf
+查看系统负载情况
+答案：uptime
+提取客户 ID 为偶数的记录（ID 在第 1 列）
+答案：awk '$1 % 2 == 0' 客户表.csv
+将风控报告按日期排序（日期在第 1 列）
+答案：sort -k1,1 报告.csv
