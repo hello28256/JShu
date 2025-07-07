@@ -200,6 +200,24 @@ set集合：
 		
 		f = decorator(hello)
 		f()  # 输出：装饰中... \n Hello
+
+闭包：
+	def make_counter():
+		count = 0  # 外部函数的局部变量
+		def counter():
+			nonlocal count  # 声明我们要修改外部变量
+			count += 1
+			return count
+		return counter
+	
+	c1 = make_counter()
+	print(c1())  # 输出 1
+	print(c1())  # 输出 2
+	print(c1())  # 输出 3
+	
+	c2 = make_counter()
+	print(c2())  # 输出 1（新的闭包，不影响 c1）
+	#当这个闭包函数不再被引用时，它内部保存的变量也会一起被释放。
 		
 线程与进程：
 	
